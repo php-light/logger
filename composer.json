@@ -1,0 +1,12 @@
+{
+    "name": "iknsa/logger",
+    "description": "A standalone PHP library for logging data",
+    "type": "library",
+    "authors": [
+        {
+            "name": "Khalid Sookia",
+            "email": "khalidsookia@gmail.com"
+        }
+    ],
+    "require": {}
+}
