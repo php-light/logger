@@ -19,6 +19,7 @@ class Logs
     const DEFAULT_FILE = 'romenys.log';
 
     const FORMAT_TXT = 'txt';
+    const FORMAT_LOG = 'log';
     const FORMAT_PHP_ARRAY = 'array';
     const FORMAT_JSON = 'json';
 
@@ -36,10 +37,10 @@ class Logs
 
     public function __construct($environment = null, $path = null, $file = null, $format = null)
     {
-        is_null($environment) ? $this->setEnvironment() : $environment;
-        is_null($path) ? self::DEFAULT_PATH : $path;
-        is_null($file) ? self::DEFAULT_FILE : $file;
-        is_null($format) ? self::FORMAT_TXT : $format;
+        is_null($environment) ? $this->setEnvironment($environment) : $environment;
+        $this->setPath($path);
+        $this->setFormat($format);
+        $this->setFile($file);
     }
 
     /**
@@ -101,6 +102,8 @@ class Logs
      */
     public function setPath($path)
     {
+        $path = is_null($path) ? self::DEFAULT_PATH : $path;
+
         $this->path = $path;
 
         return $this;
@@ -120,7 +123,7 @@ class Logs
      */
     public function setFile($file)
     {
-        is_null($file) ? strtolower($this->getEnvironment()) . '.' . $this->getFormat();
+        $file = is_null($file) ? strtolower($this->getEnvironment()) . '.' . $this->getFormat() : $file;
 
         $this->file = $file;
 
@@ -141,7 +144,38 @@ class Logs
      */
     public function setFormat($format)
     {
+        $format = is_null($format) ? self::FORMAT_LOG : $format;
+
         $this->format = $format;
+
+        return $this;
+    }
+
+    /**
+     * Add log
+     * @param $data mixed|string|array
+     * @param $type string
+     *
+     * @return Logs
+     */
+    public function addLog($datas, $type)
+    {
+        $dateTime = new \DateTime("now");
+
+        if (!$type || $type === "") $type = "info";
+
+        $file = $this->getPath() . $this->getFile();
+
+        if (!is_file($file)) touch($file);
+
+        if (is_string($datas)) {
+            $datas = $dateTime->format("Y-m-d H:i") . " [" . $type . "] " . $datas;
+            file_put_contents($file, $datas.PHP_EOL , FILE_APPEND | LOCK_EX);
+        } else {
+            foreach ($datas as $data) {
+                file_put_contents($file, $datas.PHP_EOL , FILE_APPEND | LOCK_EX);
+            }
+        }
 
         return $this;
     }
