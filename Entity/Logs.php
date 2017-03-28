@@ -6,9 +6,9 @@
  * Time: 17:54
  */
 
-namespace Romenys\Logger\Entity;
+namespace PhpLight\Logger\Entity;
 
-use Romenys\Helpers\GetEnvironmentByHostName;
+use PhpLight\Helpers\GetEnvironmentByHostName;
 
 class Logs
 {
@@ -16,7 +16,7 @@ class Logs
 
     const DEFAULT_PATH = 'var/logs/';
 
-    const DEFAULT_FILE = 'romenys.log';
+    const DEFAULT_FILE = 'php-light.log';
 
     const FORMAT_TXT = 'txt';
     const FORMAT_LOG = 'log';
